@@ -96,5 +96,6 @@
                 android:layout_weight="1"
                 android:text="Iniciar sesion" />
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

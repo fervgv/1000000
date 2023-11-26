@@ -8,6 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.firebase.Firebase;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import clases.objeto;
+
 public class Registro extends AppCompatActivity {
     EditText nombreregistro;
     EditText apellidoregistro;
@@ -20,10 +27,17 @@ public class Registro extends AppCompatActivity {
     Button registrarseformulario;
     Button volver;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+
+        //esto es para iniciar el objeto para enviar informacion (reciba)
+        //una vez inicializado se le ingresan setters
+        //luego se referencia la bd y la bd envia la informacion
+        //objeto o =new objeto();
+        initfirebase(); //siempre se debe poner esto para iniciar la bd
 
         nombreregistro=(EditText) findViewById(R.id.nombreregistro);
         apellidoregistro=(EditText) findViewById(R.id.apellidoregistro);
@@ -50,8 +64,18 @@ public class Registro extends AppCompatActivity {
                 startActivity(regresar);
 
             }
+
         })
         ;}
+
+
+    private void initfirebase () {
+        FirebaseApp.initializeApp(this);//contexto
+        firebaseDatabase = FirebaseDatabase.getInstance();//llamar a la BD para que se cree
+        databaseReference = firebaseDatabase.getReference(); //permisos para realizar operaciones en la BD
+    }
+
+
 }
 
 

@@ -3,10 +3,10 @@ package com.example.a1000000;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -18,75 +18,72 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private list <datos> Listdatos= new ArrayList<datos>();
-    ArrayAdapter<datos> Arrayadapterdatos;
-    EditText nombreusuario;
-    EditText contraseñausuario ;
-    Button registrarse;
-    Button iniciarsesion;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+
+    private List<datos> Listdatos = new ArrayList<>();
+    private EditText nombreusuario;
+    private EditText contraseñausuario;
+    private Button registrarse;
+    private Button iniciarsesion;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        nombreusuario = findViewById(R.id.nombreusuario);
+        contraseñausuario = findViewById(R.id.contraseñausuario);
+        registrarse = findViewById(R.id.registrarse);
+        iniciarsesion = findViewById(R.id.iniciarsesion);
 
-        nombreusuario = (EditText) findViewById(R.id.nombreusuario);
-        contraseñausuario = (EditText) findViewById(R.id.contraseñausuario);
-        registrarse = (Button) findViewById(R.id.registrarse);
         inicializarFireBase();
         Listar();
 
-        Intent registro = new Intent(this, Registro.class);
         registrarse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent registro = new Intent(MainActivity.this, Registro.class);
                 startActivity(registro);
             }
-
         });
 
-        iniciarsesion = (Button) findViewById(R.id.iniciarsesion);
-        Intent pagprincipal = new Intent(this,com.example.a1000000.home.class);
         iniciarsesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent pagprincipal = new Intent(MainActivity.this, home.class);
                 startActivity(pagprincipal);
-
             }
         });
     }
 
-    private void  Listar() {
+    private void inicializarFireBase() {
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+    }
+
+    private void Listar() {
         databaseReference.child("datos").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listardatos.clear();
-
-                for ( DataSnapshot objs: snapshot.getChildren()) {
+                Listdatos.clear(); // Limpiar la lista antes de agregar nuevos datos
+                for (DataSnapshot objs : snapshot.getChildren()) {
                     datos d = objs.getValue(datos.class);
-                    Listdatos.add(d);
-                    Arrayadapterdatos = new adapter <datos>(MainActivity.this, android.R.layout.simple_expandable_list_item_1);
+                    if (d != null) {
+                        Listdatos.add(d);
+                    }
                 }
-
+                // Aquí puedes actualizar la interfaz de usuario con los datos de la lista si es necesario
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                // Manejar el error si es necesario
             }
         });
-
-
-        private void inicializarFireBase() {
-            FirebaseApp.initializeApp(context.this);
-            firebaseDatabase= FirebaseDatabase.getInstance();
-            databaseReference = firebaseDatabase.getReference();
-
-        }
-
     }
-
+}

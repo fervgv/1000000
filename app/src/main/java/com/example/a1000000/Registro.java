@@ -71,8 +71,8 @@ public class Registro extends AppCompatActivity {
 
     private void initfirebase () {
         FirebaseApp.initializeApp(this);//contexto
-        firebaseDatabase = FirebaseDatabase.getInstance();//llamar a la BD para que se cree
-        databaseReference = firebaseDatabase.getReference(); //permisos para realizar operaciones en la BD
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();//llamar a la BD para que se cree
+        DatabaseReference databaseReference = firebaseDatabase.getReference(); //permisos para realizar operaciones en la BD
     }
 
 
